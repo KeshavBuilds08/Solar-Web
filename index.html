@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Circuitech - Autonomous Solar Panel Cleaning and Monitoring System using ESP32, Arduino Uno, Multi-Sensor Telemetry, and ThingSpeak IoT Cloud.">
+  <title>Circuitech | Autonomous Solar Panel Cleaning & IoT Telemetry</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="site-nav" id="main-nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </div>
+        <span>Circuitech</span>
+      </a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle Navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="index.html" class="active">Overview</a></li>
+        <li><a href="about.html">Architecture</a></li>
+        <li><a href="#hardware">Hardware</a></li>
+        <li><a href="dashboard.html">Live Telemetry</a></li>
+      </ul>
+
+      <div class="nav-auth" id="nav-auth-container">
+        <a href="login.html" class="btn-ghost">Sign In</a>
+        <a href="register.html" class="btn-solid">Get Access</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-shape hero-shape-1"></div>
+      <div class="hero-shape hero-shape-2"></div>
+      <div class="hero-shape hero-shape-3"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span>IoT Channel 3531242 Active | ESP32 Telemetry</span>
+      </div>
+
+      <h1>
+        Autonomous Photovoltaic Maintenance &amp; <span class="highlight">Telemetry Platform</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Eliminating soiling losses with precision dual-microcontroller orchestration. Combining ESP32 IoT gateway networking, Arduino Uno motion control, and real-time multi-spectral sensor analytics via ThingSpeak.
+      </p>
+
+      <div class="hero-actions">
+        <a href="dashboard.html" class="btn-hero-primary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Launch Telemetry Console
+        </a>
+        <a href="about.html" class="btn-hero-secondary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          Technical Specification
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Key Architecture Pillars -->
+  <section class="section" id="features">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-label">Engineering Capabilities</div>
+        <h2 class="section-heading">Designed for Maximum Photovoltaic Yield</h2>
+        <p class="section-desc">
+          Dust and particulates cause up to 35% degradation in solar array output. Circuitech continuously senses degradation and initiates autonomous recovery.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Real-Time Power Sensing</h3>
+          <p class="feature-desc">Continuous DC voltage and current monitoring computes instantaneous wattage to detect yield drops in sub-second granularity.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Ultrasonic Dust Profiling</h3>
+          <p class="feature-desc">High-frequency acoustic echo distance metrics verify particle build-up and soiling density directly over the photovoltaic glass.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">Atmospheric Safeguard</h3>
+          <p class="feature-desc">Integrated humidity sensing checks ambient moisture conditions to prevent mud formation during heavy morning dew or precipitation.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-4">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+          </div>
+          <h3 class="feature-title">High-Torque Actuation</h3>
+          <p class="feature-desc">Arduino-driven DC gear motor actuator smoothly traverses mechanical wiping gantries across the panel surface with automatic limit stopping.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Pipeline -->
+  <section class="section" style="background: rgba(255,255,255,0.01);">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-label">Workflow Automation</div>
+        <h2 class="section-heading">How the Closed-Loop Cycle Operates</h2>
+        <p class="section-desc">From hardware sensors to cloud arbitration and physical mechanical cleaning.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal reveal-delay-1">
+          <div class="step-number">01</div>
+          <h3 class="step-title">Multi-Sensor Ingestion</h3>
+          <p class="step-desc">Sensors capture voltage, current, relative humidity, and acoustic distance to establish real-time surface clarity profiles.</p>
+        </div>
+
+        <div class="step reveal reveal-delay-2">
+          <div class="step-number">02</div>
+          <h3 class="step-title">Telemetry Arbitration</h3>
+          <p class="step-desc">The ESP32 aggregates sensor payloads and streams updates to ThingSpeak channel 3531242 over secure 802.11 Wi-Fi links.</p>
+        </div>
+
+        <div class="step reveal reveal-delay-3">
+          <div class="step-number">03</div>
+          <h3 class="step-title">Autonomous Actuation</h3>
+          <p class="step-desc">When dust accumulation exceeds thresholds under safe atmospheric conditions, the Arduino Uno executes a motorized sweep sequence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hardware Component Matrix -->
+  <section class="section" id="hardware">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-label">System Hardware Stack</div>
+        <h2 class="section-heading">Integrated Component Ecosystem</h2>
+        <p class="section-desc">Industrial-grade and embedded microcontrollers calibrated for hostile solar environment operations.</p>
+      </div>
+
+      <div class="hardware-grid">
+        <div class="hardware-item reveal reveal-delay-1">
+          <div class="hardware-dot"></div>
+          <div class="hardware-info">
+            <h4>ESP32 Microcontroller</h4>
+            <p>Dual-core IoT processor handling Wi-Fi streaming and ThingSpeak API synchronization.</p>
+          </div>
+        </div>
+
+        <div class="hardware-item reveal reveal-delay-2">
+          <div class="hardware-dot"></div>
+          <div class="hardware-info">
+            <h4>Arduino Uno R3</h4>
+            <p>Dedicated co-processor driving the gear motor relay switches and limit end-stops.</p>
+          </div>
+        </div>
+
+        <div class="hardware-item reveal reveal-delay-3">
+          <div class="hardware-dot"></div>
+          <div class="hardware-info">
+            <h4>Precision Voltage Sensor</h4>
+            <p>Resistive divider module calibrated to read up to 25V DC panel potential.</p>
+          </div>
+        </div>
+
+        <div class="hardware-item reveal reveal-delay-1">
+          <div class="hardware-dot"></div>
+          <div class="hardware-info">
+            <h4>Current Sensor Module</h4>
+            <p>Hall-effect analog sensing measuring load current across the inverter rails.</p>
+          </div>
+        </div>
+
+        <div class="hardware-item reveal reveal-delay-2">
+          <div class="hardware-dot"></div>
+          <div class="hardware-info">
+            <h4>Digital Humidity Sensor</h4>
+            <p>Capacitive relative humidity sensing to inhibit cleaning during rain or heavy dew.</p>
+          </div>
+        </div>
+
+        <div class="hardware-item reveal reveal-delay-3">
+          <div class="hardware-dot"></div>
+          <div class="hardware-info">
+            <h4>Ultrasonic Range Finder</h4>
+            <p>Sonar transducer analyzing physical dust layering and proximity deviations.</p>
+          </div>
+        </div>
+
+        <div class="hardware-item reveal reveal-delay-1">
+          <div class="hardware-dot"></div>
+          <div class="hardware-info">
+            <h4>High-Torque DC Gear Motor</h4>
+            <p>12V metallic geared transmission driving the bidirectional wiper gantry.</p>
+          </div>
+        </div>
+
+        <div class="hardware-item reveal reveal-delay-2">
+          <div class="hardware-dot"></div>
+          <div class="hardware-info">
+            <h4>ThingSpeak Cloud Engine</h4>
+            <p>IoT cloud channel handling real-time data ingestion, aggregation, and JSON feeds.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Performance Metrics Bar -->
+  <section class="section" style="padding-top: 20px;">
+    <div class="section-inner">
+      <div class="stats-bar reveal">
+        <div class="stat-item">
+          <div class="stat-value">99.4%</div>
+          <div class="stat-label">Yield Retention</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">&lt;15s</div>
+          <div class="stat-label">Cloud Sync Latency</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">0</div>
+          <div class="stat-label">Manual Dispatches</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">PBKDF2</div>
+          <div class="stat-label">Security Protocol</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="cta-section">
+    <div class="section-inner reveal">
+      <h2>Ready to Inspect Live Solar Metrics?</h2>
+      <p>Log in or view live telemetry data streaming directly from your hardware setup.</p>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="dashboard.html" class="btn-hero-primary">Enter Telemetry Console</a>
+        <a href="login.html" class="btn-hero-secondary">Operator Sign In</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        &copy; 2026 Circuitech Systems. Autonomous Photovoltaic Optimization &amp; IoT Telemetry.
+      </div>
+      <ul class="footer-links">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="about.html">Architecture</a></li>
+        <li><a href="dashboard.html">Console</a></li>
+        <li><a href="login.html">Sign In</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // Smooth scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Nav scroll effect
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Mobile nav toggle
+    const toggle = document.getElementById('nav-toggle');
+    const links = document.getElementById('nav-links');
+    if (toggle && links) {
+      toggle.addEventListener('click', () => {
+        links.classList.toggle('open');
+      });
+    }
+  </script>
+</body>
+</html>

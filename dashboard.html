@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Circuitech Real-time Solar Panel Telemetry and Motor Control Dashboard powered by ThingSpeak IoT Channel 3531242.">
+  <title>Telemetry Console - Circuitech</title>
+
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/main.css">
+  <!-- Immediate Cryptographic Session Guard -->
+  <script>
+    (function() {
+      try {
+        const raw = sessionStorage.getItem('circuitech_active_session');
+        if (!raw) {
+          window.location.replace('login.html?restricted=1&next=dashboard.html');
+          return;
+        }
+        const session = JSON.parse(raw);
+        if (!session || !session.token || (Date.now() - session.timestamp > 8 * 3600 * 1000)) {
+          sessionStorage.removeItem('circuitech_active_session');
+          window.location.replace('login.html?restricted=1&next=dashboard.html');
+        }
+      } catch (e) {
+        window.location.replace('login.html?restricted=1&next=dashboard.html');
+      }
+    })();
+  </script>
+</head>
+<body style="padding-top: 80px;">
+
+  <!-- Global Navigation -->
+  <header class="site-nav scrolled" id="main-nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </div>
+        <span>Circuitech Console</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="about.html">Architecture</a></li>
+        <li><a href="dashboard.html" class="active">Live Telemetry</a></li>
+      </ul>
+
+      <div class="nav-auth" id="nav-auth-container">
+        <a href="login.html" class="btn-ghost">Sign In</a>
+        <a href="register.html" class="btn-solid" style="padding: 7px 16px; font-size: 0.8rem;">Register</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+
+    <!-- Secondary Console Header & Status Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--glass-border); flex-wrap: wrap; gap: 14px;">
+      <div>
+        <h1 style="font-size: 1.4rem; font-weight: 700; letter-spacing: -0.5px;">Photovoltaic Telemetry &amp; Automation</h1>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 2px;">
+          Synchronized with ThingSpeak Channel ID: <span style="color: var(--accent-solar); font-family: monospace;">3531242</span> (ESP32 IoT Node)
+        </p>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <div class="status-badge online" id="status-badge">
+          <span class="status-dot"></span>
+          <span>CONNECTING</span>
+        </div>
+        <span class="last-update" id="last-update">Connecting...</span>
+        <button class="btn btn-secondary" id="btn-settings" style="padding: 8px 14px; font-size: 0.8rem;">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+          API Parameters
+        </button>
+      </div>
+    </div>
+
+    <!-- Sensor Metrics Grid -->
+    <section id="metrics">
+      <h2 class="section-title">Telemetry Feeds</h2>
+      <div class="metrics-grid">
+
+        <!-- Voltage Module -->
+        <div class="metric-card voltage" id="card-voltage">
+          <div class="metric-header">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+            </div>
+            <span class="metric-label">Panel Voltage (Field 1)</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="val-voltage">--</span>
+            <span class="metric-unit">V</span>
+          </div>
+          <span class="metric-sub" id="sub-voltage">Awaiting ingestion</span>
+          <div class="metric-bar-track"><div class="metric-bar-fill" id="bar-voltage" style="width:0%"></div></div>
+        </div>
+
+        <!-- Current Module -->
+        <div class="metric-card current" id="card-current">
+          <div class="metric-header">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 20V10M12 20V4M6 20v-6"></path>
+              </svg>
+            </div>
+            <span class="metric-label">Array Current (Field 2)</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="val-current">--</span>
+            <span class="metric-unit">A</span>
+          </div>
+          <span class="metric-sub" id="sub-current">Awaiting ingestion</span>
+          <div class="metric-bar-track"><div class="metric-bar-fill" id="bar-current" style="width:0%"></div></div>
+        </div>
+
+        <!-- Humidity Module -->
+        <div class="metric-card humidity" id="card-humidity">
+          <div class="metric-header">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+            </div>
+            <span class="metric-label">Relative Humidity (Field 3)</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="val-humidity">--</span>
+            <span class="metric-unit">%</span>
+          </div>
+          <span class="metric-sub" id="sub-humidity">Awaiting ingestion</span>
+          <div class="metric-bar-track"><div class="metric-bar-fill" id="bar-humidity" style="width:0%"></div></div>
+        </div>
+
+        <!-- Dust / Ultrasonic Module -->
+        <div class="metric-card dust" id="card-dust">
+          <div class="metric-header">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="2"></circle>
+                <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path>
+              </svg>
+            </div>
+            <span class="metric-label">Dust Proximity (Field 4)</span>
+          </div>
+          <div class="metric-value-row">
+            <span class="metric-value" id="val-dust">--</span>
+            <span class="metric-unit">cm</span>
+          </div>
+          <span class="metric-sub" id="sub-dust">Awaiting ingestion</span>
+          <div class="metric-bar-track"><div class="metric-bar-fill" id="bar-dust" style="width:0%"></div></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Power Overview Cards -->
+    <section id="power-stats">
+      <h2 class="section-title">Photovoltaic Output Computation</h2>
+      <div class="power-card">
+        <div class="power-stat">
+          <div class="power-stat-label">Instantaneous Power</div>
+          <div class="power-stat-value solar" id="stat-power">-- W</div>
+          <div class="power-stat-sub">V x I Direct Product</div>
+        </div>
+        <div class="power-stat">
+          <div class="power-stat-label">Session Mean Voltage</div>
+          <div class="power-stat-value blue" id="stat-voltage-avg">-- V</div>
+          <div class="power-stat-sub">Historical Average</div>
+        </div>
+        <div class="power-stat">
+          <div class="power-stat-label">Session Mean Current</div>
+          <div class="power-stat-value green" id="stat-current-avg">-- A</div>
+          <div class="power-stat-sub">Historical Average</div>
+        </div>
+        <div class="power-stat">
+          <div class="power-stat-label">Wiper Dispatches</div>
+          <div class="power-stat-value purple" id="stat-cleans">0</div>
+          <div class="power-stat-sub">Automated &amp; Manual</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chart Visualizations -->
+    <section class="charts-section" id="charts">
+      <h2 class="section-title">Telemetry Time-Series Analysis</h2>
+      <div class="charts-grid">
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Photovoltaic Potential (Volts)</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-voltage"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Photovoltaic Current (Amperes)</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-current"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Atmospheric Relative Humidity (%)</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-humidity"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">Ultrasonic Dust Clearance Distance (cm)</span>
+          </div>
+          <div class="chart-canvas-wrapper">
+            <canvas id="chart-dust"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Gear Motor Actuation & Arbitration Control -->
+    <section class="control-section" id="controls">
+      <h2 class="section-title">Wiper Gantry &amp; Actuator Control</h2>
+      <div class="control-panel">
+
+        <div class="control-info">
+          <h3>Arduino Uno Motor Control Interface</h3>
+          <p>
+            Closed-loop arbitration triggers the high-torque gear motor when dust proximity drops below the safety threshold under dry conditions (&lt;80% RH).
+          </p>
+          <div class="motor-status-row">
+            <span class="motor-status-label">Transmission State:</span>
+            <span class="motor-status-indicator idle" id="motor-indicator">IDLE</span>
+          </div>
+        </div>
+
+        <div class="control-actions">
+          <button class="btn btn-primary" id="btn-clean-now">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Execute Sweep Sequence
+          </button>
+          <button class="btn btn-danger" id="btn-stop-motor">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+              <rect x="6" y="6" width="12" height="12"></rect>
+            </svg>
+            Halt Actuator
+          </button>
+        </div>
+
+        <div class="threshold-config">
+          <div class="threshold-item">
+            <label for="threshold-dust">Dust Setpoint</label>
+            <input type="number" class="threshold-input" id="threshold-dust" value="10" min="1" max="50" step="1">
+            <span class="threshold-unit">cm</span>
+          </div>
+          <div class="threshold-item">
+            <label for="threshold-humidity">Humidity Ceiling</label>
+            <input type="number" class="threshold-input" id="threshold-humidity" value="80" min="10" max="100" step="5">
+            <span class="threshold-unit">%</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Activity Log -->
+    <section class="log-section" id="log">
+      <h2 class="section-title">System Event Journal</h2>
+      <div class="log-panel">
+        <div class="log-header">
+          <h3>Firmware &amp; Cloud Gateway Feed</h3>
+          <button class="log-clear-btn" id="btn-clear-log">Flush Log</button>
+        </div>
+        <div class="log-entries" id="log-entries">
+          <!-- Entries populated dynamically -->
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Settings Configuration Modal -->
+  <div class="config-overlay" id="config-overlay">
+    <div class="config-modal">
+      <h2>ThingSpeak IoT Parameters</h2>
+      <p>Configure channel connection keys for ESP32 cloud telemetry synchronization.</p>
+      <div class="config-field">
+        <label for="config-channel">Channel ID</label>
+        <input type="text" class="config-input" id="config-channel" value="3531242">
+      </div>
+      <div class="config-field">
+        <label for="config-apikey">Read API Key</label>
+        <input type="text" class="config-input" id="config-apikey" value="VSKXXRE6IET6WPZJ">
+      </div>
+      <div class="config-actions">
+        <button class="btn btn-primary" id="config-save">Save &amp; Reconnect</button>
+        <button class="btn btn-secondary" id="config-cancel">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        &copy; 2026 Circuitech Systems. Channel 3531242 Live Telemetry Console.
+      </div>
+      <ul class="footer-links">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="about.html">Architecture</a></li>
+        <li><a href="dashboard.html">Console</a></li>
+        <li><a href="login.html">Sign In</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

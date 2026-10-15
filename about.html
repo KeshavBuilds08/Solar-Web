@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Technical Architecture - Circuitech Autonomous Photovoltaic Cleaning System with ESP32, Arduino Uno, Multi-Sensor Telemetry, and ThingSpeak.">
+  <title>System Architecture - Circuitech</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="site-nav" id="main-nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </div>
+        <span>Circuitech</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="about.html" class="active">Architecture</a></li>
+        <li><a href="index.html#hardware">Hardware</a></li>
+        <li><a href="dashboard.html">Live Telemetry</a></li>
+      </ul>
+
+      <div class="nav-auth" id="nav-auth-container">
+        <a href="login.html" class="btn-ghost">Sign In</a>
+        <a href="register.html" class="btn-solid">Get Access</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Header -->
+  <section class="about-hero">
+    <div class="section-label">Engineering Whitepaper</div>
+    <h1>Photovoltaic Telemetry &amp; Robotics Architecture</h1>
+    <p>
+      A technical breakdown of the dual-microcontroller embedded control system, telemetry serialization, sensor instrumentation, and autonomous wiper mechanics.
+    </p>
+  </section>
+
+  <!-- Main Architecture Content -->
+  <main class="about-content">
+
+    <!-- Block 1: Problem Statement -->
+    <article class="about-block">
+      <h2>1. The Photovoltaic Soiling Challenge</h2>
+      <p>
+        Dust, airborne particulates, pollen, and industrial soot continuously accumulate on photovoltaic panels. Research indicates that accumulated surface dust can reduce overall power conversion efficiency by 15% to 35% in arid and semi-arid environments.
+      </p>
+      <p>
+        Traditional manual cleaning requires periodic labor, manual inspections, and significant water consumption. Circuitech introduces an autonomous, sensor-arbitrated closed-loop system that only dispatches mechanical cleaning when soiling breaches calibrated thresholds and atmospheric conditions are optimal.
+      </p>
+    </article>
+
+    <!-- Block 2: Dual Microcontroller System -->
+    <article class="about-block">
+      <h2>2. Dual-Microcontroller Distributed Topology</h2>
+      <p>
+        The hardware architecture delegates responsibilities between an IoT communication controller (ESP32) and a real-time motion controller (Arduino Uno R3) to guarantee deterministic motor timings without blocking network communications.
+      </p>
+
+      <div class="arch-diagram">
+        <div class="arch-node">
+          <h4>ESP32 Node</h4>
+          <p>Wi-Fi 802.11 Stack, REST API Client, Sensor Ingestion, ThingSpeak Cloud Synchronization</p>
+        </div>
+        <div class="arch-arrow">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </div>
+        <div class="arch-node">
+          <h4>Arduino Uno R3</h4>
+          <p>H-Bridge Driver, Gear Motor PWM, Hardware Limit Switches, Surface Sweep Sequencer</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Block 3: Sensor Instrumentation -->
+    <article class="about-block">
+      <h2>3. Sensor Telemetry &amp; Channel Allocation</h2>
+      <p>
+        Sensors sample continuous telemetry that is serialized into ThingSpeak IoT Channel <strong>3531242</strong>:
+      </p>
+
+      <table class="about-table">
+        <thead>
+          <tr>
+            <th>Telemetry Field</th>
+            <th>Sensor Component</th>
+            <th>Measurement Range</th>
+            <th>Operational Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Field 1</strong></td>
+            <td>Precision DC Voltage Sensor</td>
+            <td>0 to 25.0 V DC</td>
+            <td>Measures open-circuit / loaded PV voltage to detect irradiance &amp; soiling drops.</td>
+          </tr>
+          <tr>
+            <td><strong>Field 2</strong></td>
+            <td>ACS712 Current Sensor</td>
+            <td>0 to 5.0 / 20.0 A</td>
+            <td>Captures instantaneous system amperage for power generation curve calculation.</td>
+          </tr>
+          <tr>
+            <td><strong>Field 3</strong></td>
+            <td>Digital Humidity Sensor</td>
+            <td>0 to 100% RH</td>
+            <td>Prevents dry mud formation by inhibiting wiping when ambient humidity exceeds 80%.</td>
+          </tr>
+          <tr>
+            <td><strong>Field 4</strong></td>
+            <td>HC-SR04 Ultrasonic Sensor</td>
+            <td>2 to 400 cm</td>
+            <td>Acoustic distance detection measuring dust accumulation thickness across the glass panel.</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+    <!-- Block 4: Actuator Mechanics -->
+    <article class="about-block">
+      <h2>4. Electromechanical Actuator &amp; Wiper Gantry</h2>
+      <p>
+        Cleaning is executed by a high-torque 12V DC gear motor coupled with an industrial worm gear transmission and rack-and-pinion sliding gantry.
+      </p>
+      <p>
+        The wiper assembly utilizes an anti-scratch silicone-rubber squeegee blade. When the ultrasonic sensor detects dust distance below the configured setpoint (default: 10 cm) and relative humidity is below the safety threshold (default: 80%), the system issues an actuation command:
+      </p>
+      <ul style="padding-left: 24px; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+        <li>Forward traversal at regulated torque across the solar panel face.</li>
+        <li>Reversal trigger via mechanical end-stop limit switch.</li>
+        <li>Return to home position with motor power shutoff to conserve energy.</li>
+      </ul>
+    </article>
+
+    <!-- Block 5: Security Architecture -->
+    <article class="about-block">
+      <h2>5. Security &amp; Data Integrity Safeguards</h2>
+      <p>
+        Access to the Circuitech console incorporates military-standard cryptographic standards:
+      </p>
+      <ul style="padding-left: 24px; color: var(--text-secondary); font-size: 0.9rem; line-height: 1.8;">
+        <li><strong>Client-Side PBKDF2-SHA256:</strong> Passwords are never stored in plaintext. They undergo 100,000 hashing rounds combined with unique 16-byte cryptographically secure random salts.</li>
+        <li><strong>Brute-Force Lockout Engine:</strong> 5 consecutive failed authentication attempts automatically lock the account for 5 minutes.</li>
+        <li><strong>Isolated Local Database:</strong> Account credentials reside securely in client-side IndexedDB databases protected by the browser's origin boundary.</li>
+        <li><strong>Zero Third-Party Trackers:</strong> No external analytics, trackers, or cookies are loaded, ensuring compliance with strict industrial security requirements.</li>
+      </ul>
+    </article>
+
+    <!-- CTA -->
+    <div style="text-align: center; margin-top: 48px;">
+      <a href="dashboard.html" class="btn-hero-primary">Access Live Telemetry Dashboard</a>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        &copy; 2026 Circuitech Systems. Technical Documentation &amp; Architecture.
+      </div>
+      <ul class="footer-links">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="about.html">Architecture</a></li>
+        <li><a href="dashboard.html">Console</a></li>
+        <li><a href="login.html">Sign In</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

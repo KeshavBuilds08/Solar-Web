@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Secure Operator Login - Circuitech Autonomous Photovoltaic Cleaning System">
+  <title>Operator Portal - Circuitech</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="site-nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-brand-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </div>
+        <span>Circuitech</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="about.html">Architecture</a></li>
+        <li><a href="dashboard.html">Telemetry Console</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a href="register.html" class="btn-solid" style="padding: 7px 16px; font-size: 0.8rem;">Create Account</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Auth Canvas Area -->
+  <main class="auth-page">
+    <div class="auth-bg">
+      <div class="auth-bg-grid"></div>
+      <div class="auth-bg-orb auth-bg-orb-1"></div>
+      <div class="auth-bg-orb auth-bg-orb-2"></div>
+      <div class="auth-bg-orb auth-bg-orb-3"></div>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-card-header">
+        <div class="auth-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </div>
+        <h1>Operator Authentication</h1>
+        <p>Access telemetry feeds and autonomous cleaning controls</p>
+      </div>
+
+      <div id="auth-error-banner" class="auth-error-banner"></div>
+      <div id="auth-success-banner" class="auth-success-banner"></div>
+
+      <form id="login-form" class="auth-form" autocomplete="on">
+        <div class="form-group">
+          <label for="login-email">Engineer Email</label>
+          <input
+            type="email"
+            id="login-email"
+            class="form-input"
+            placeholder="operator@circuitech.com"
+            required
+            autocomplete="email"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Master Key / Password</label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="login-password"
+              class="form-input"
+              placeholder="Enter account password"
+              required
+              autocomplete="current-password"
+            >
+            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" id="login-submit" class="btn-auth">
+          <span class="btn-text">Authenticate Credentials</span>
+          <div class="spinner"></div>
+        </button>
+
+        <div class="auth-divider">
+          <span>Security Notice</span>
+        </div>
+
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 12px 14px; border-radius: 8px; font-size: 0.76rem; color: var(--text-muted); line-height: 1.5;">
+          <strong style="color: var(--accent-solar); display: block; margin-bottom: 2px;">End-to-End Cryptography</strong>
+          Passwords are processed via client-side PBKDF2-SHA256 derivation with 100,000 salt iterations before storage. Brute-force protection auto-locks accounts after 5 invalid attempts.
+        </div>
+      </form>
+
+      <div class="auth-footer">
+        <p>New technician? <a href="register.html">Register credentials</a></p>
+        <p style="margin-top: 10px; font-size: 0.76rem;">
+          <a href="#" id="btn-toggle-cloud" style="color: var(--text-muted); text-decoration: underline;">
+            Database: <span id="cloud-status-indicator">Local Encrypted</span> (Configure Cloud)
+          </a>
+        </p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Supabase Cloud Config Modal -->
+  <div class="config-overlay" id="cloud-modal" style="display: none;">
+    <div class="config-modal" style="max-width: 480px;">
+      <h2>Supabase Cloud Database (PostgreSQL)</h2>
+      <p>Connect your free Supabase project to enable global multi-device login from any phone, laptop, or tablet.</p>
+      
+      <div class="config-field">
+        <label for="supabase-url">Supabase Project URL</label>
+        <input type="url" class="config-input" id="supabase-url" placeholder="https://yourproject.supabase.co">
+      </div>
+      
+      <div class="config-field">
+        <label for="supabase-key">Supabase Anon Key</label>
+        <input type="text" class="config-input" id="supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6...">
+      </div>
+
+      <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px;">
+        Get your free keys in 1 minute: Go to <a href="https://supabase.com" target="_blank" style="color: var(--accent-solar);">supabase.com</a> &gt; Create Project &gt; Settings &gt; API.
+      </div>
+
+      <div class="config-actions">
+        <button class="btn btn-primary" id="btn-save-cloud">Save &amp; Enable Cloud</button>
+        <button class="btn btn-secondary" id="btn-close-cloud">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase CDN & Cryptography Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
